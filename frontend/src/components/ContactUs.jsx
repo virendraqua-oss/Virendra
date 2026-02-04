@@ -136,10 +136,15 @@
 
 // export default ContactUs;
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import siteConfig from "../config/siteConfig.js";
 import MaterialIcon from "./MaterialIcon.jsx";
-import emailjs from "@emailjs/browser";
+
+const CONTACT_API_URL = (
+  import.meta.env.VITE_CONTACT_API_URL ||
+  import.meta.env.VITE_PRODUCTS_API_URL ||
+  ""
+).replace(/\/$/, "");
 
 const contactDetails = [
   {
@@ -161,35 +166,103 @@ const contactDetails = [
     label: "Visit our lab",
     value: siteConfig.contact.address,
     helper: "Mon - Fri, 9 am to 7 pm",
+    newTab: true,
+    href: siteConfig.contact.locationHref,
   },
 ];
 
 const ContactUs = () => {
-  const formRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [notice, setNotice] = useState(null);
+  const [errors, setErrors] = useState({});
 
-  const sendEmail = (e) => {
+  const clearFieldError = (field) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+    if (notice?.type === "error") {
+      setNotice(null);
+    }
+  };
+
+  const sendEmail = async (e) => {
     e.preventDefault();
+    setNotice(null);
     setLoading(true);
 
-    emailjs
-      .sendForm(
-        "service_cklj7nc",
-        "template_mg4xpvh",
-        formRef.current,
-        "iBuEYxOQzvARGMBUd"
-      )
-      .then(
-        () => {
-          setLoading(false);
-          alert("Message sent successfully!");
-          formRef.current.reset();
-        },
-        () => {
-          setLoading(false);
-          alert("Something went wrong. Please try again.");
-        }
-      );
+    if (!CONTACT_API_URL) {
+      setLoading(false);
+      setNotice("Missing contact endpoint. Set VITE_CONTACT_API_URL.");
+      return;
+    }
+
+    const form = e.currentTarget;
+    const payload = Object.fromEntries(new FormData(form).entries());
+    const nextErrors = {};
+    const name = String(payload.name || "").trim();
+    const email = String(payload.email || "").trim();
+    const phone = String(payload.phone || "").trim();
+    const message = String(payload.message || "").trim();
+
+    if (!name) {
+      nextErrors.name = "Please enter your name.";
+    }
+
+    if (!email) {
+      nextErrors.email = "Please enter your email address.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nextErrors.email = "Enter a valid email address.";
+    }
+
+    if (phone && !/^\+?[0-9\s-]{7,15}$/.test(phone)) {
+      nextErrors.phone = "Enter a valid phone number.";
+    }
+
+    if (!message) {
+      nextErrors.message = "Please tell us what you need.";
+    }
+
+    if (Object.keys(nextErrors).length) {
+      setErrors(nextErrors);
+      setNotice({ type: "error", message: "Please fix the highlighted fields." });
+      setLoading(false);
+      const firstInvalid = Object.keys(nextErrors)[0];
+      if (firstInvalid) {
+        form.querySelector(`[name="${firstInvalid}"]`)?.focus();
+      }
+      return;
+    }
+
+    setErrors({});
+
+    try {
+      const body = new URLSearchParams({ type: "contact", ...payload });
+
+      // Apps Script does not reliably return CORS headers for POST,
+      // so use no-cors and assume success if the request is sent.
+      await fetch(CONTACT_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+
+      setNotice({
+        type: "success",
+        message: "Message sent successfully! We will get back to you soon.",
+      });
+      form.reset();
+    } catch (err) {
+      setNotice({
+        type: "error",
+        message: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -207,7 +280,8 @@ const ContactUs = () => {
           </p>
 
           <div className="mt-8 grid gap-4">
-            {contactDetails.map(({ icon, label, value, helper, href }) => (
+            {contactDetails.map(
+              ({ icon, label, value, helper, href, newTab = false }) => (
               <div
                 key={label}
                 className="flex items-start gap-4 rounded-2xl border border-base-200 bg-base-100/70 p-4"
@@ -224,6 +298,8 @@ const ContactUs = () => {
                     <a
                       href={href}
                       className="text-lg font-semibold text-base-content hover:text-primary"
+                      target={newTab ? "_blank" : undefined}
+                      rel={newTab ? "noreferrer" : undefined}
                     >
                       {value}
                     </a>
@@ -254,51 +330,130 @@ const ContactUs = () => {
           </p>
 
           {/* CONTACT FORM WITH EMAILJS */}
-          <form ref={formRef} onSubmit={sendEmail} className="mt-8 space-y-5">
+          <form onSubmit={sendEmail} className="mt-8 space-y-5" noValidate>
             <div className="grid gap-4 md:grid-cols-2">
-              <input
-                name="name"
-                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
-                placeholder="Your name"
-                required
-              />
-              <input
-                name="email"
-                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
-                placeholder="Email address"
-                type="email"
-                required
-              />
+              <div className="space-y-1">
+                <input
+                  name="name"
+                  className={`input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50 ${
+                    errors.name ? "input-error" : ""
+                  }`}
+                  placeholder="Your name"
+                  required
+                  aria-invalid={errors.name ? "true" : "false"}
+                  aria-describedby={
+                    errors.name ? "contact-name-error" : undefined
+                  }
+                  onInput={() => clearFieldError("name")}
+                />
+                {errors.name && (
+                  <p id="contact-name-error" className="text-xs text-error">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <input
+                  name="email"
+                  className={`input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50 ${
+                    errors.email ? "input-error" : ""
+                  }`}
+                  placeholder="Email address"
+                  type="email"
+                  required
+                  aria-invalid={errors.email ? "true" : "false"}
+                  aria-describedby={
+                    errors.email ? "contact-email-error" : undefined
+                  }
+                  onInput={() => clearFieldError("email")}
+                />
+                {errors.email && (
+                  <p id="contact-email-error" className="text-xs text-error">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <input
-                name="phone"
-                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
-                placeholder="Phone"
-                type="tel"
-              />
-              <input
-                name="company"
-                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
-                placeholder="Company"
-              />
+              <div className="space-y-1">
+                <input
+                  name="phone"
+                  className={`input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50 ${
+                    errors.phone ? "input-error" : ""
+                  }`}
+                  placeholder="Phone"
+                  type="tel"
+                  inputMode="tel"
+                  aria-invalid={errors.phone ? "true" : "false"}
+                  aria-describedby={
+                    errors.phone ? "contact-phone-error" : undefined
+                  }
+                  onInput={() => clearFieldError("phone")}
+                />
+                {errors.phone && (
+                  <p id="contact-phone-error" className="text-xs text-error">
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <input
+                  name="company"
+                  className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+                  placeholder="Company"
+                  onInput={() => clearFieldError("company")}
+                />
+              </div>
             </div>
 
             <textarea
               rows={5}
               name="message"
-              className="textarea textarea-bordered w-full border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+              className={`textarea textarea-bordered w-full border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50 ${
+                errors.message ? "textarea-error" : ""
+              }`}
               placeholder="Tell us about the molecule or grade you need"
               required
+              aria-invalid={errors.message ? "true" : "false"}
+              aria-describedby={
+                errors.message ? "contact-message-error" : undefined
+              }
+              onInput={() => clearFieldError("message")}
             />
+            {errors.message && (
+              <p id="contact-message-error" className="text-xs text-error">
+                {errors.message}
+              </p>
+            )}
+
+            {notice && (
+              <div
+                className={`alert ${
+                  notice.type === "success" ? "alert-success" : "alert-error"
+                }`}
+              >
+                <MaterialIcon
+                  name={notice.type === "success" ? "check_circle" : "error"}
+                  className="text-xl"
+                />
+                <span className="text-sm">{notice.message}</span>
+              </div>
+            )}
 
             <button
               type="submit"
               className="btn btn-primary w-full"
               disabled={loading}
             >
-              {loading ? "Sending..." : "Send a message"}
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="loading loading-spinner loading-sm" />
+                  Sending...
+                </span>
+              ) : (
+                "Send a message"
+              )}
             </button>
           </form>
         </div>

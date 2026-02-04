@@ -23,7 +23,7 @@ const MainLayout = () => {
       <div className={`logo-splash ${showLogoSplash ? "logo-splash--visible" : ""}`}>
         <img
           key={location.pathname}
-          src="/Virendra_Logo.png"
+          src="/Logo.png"
           alt="Virendra logo"
           className="logo-splash__logo"
         />

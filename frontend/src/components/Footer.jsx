@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="flex items-center gap-3 font-bold text-lg">
             <div className="h-10 w-10 rounded-lg bg-white/80 p-1 shadow-sm">
               <img
-                src="/Virendra_Logo.png"
+                src="/Logo.png"
                 alt={`${siteConfig.company.name} logo`}
                 className="h-full w-full object-contain"
               />

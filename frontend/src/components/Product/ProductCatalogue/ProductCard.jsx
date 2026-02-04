@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import MaterialIcon from "../../MaterialIcon.jsx";
-import { getProductImage } from "../../../utils/productImages.js";
+import {
+  getProductImage,
+  normalizeDriveImageUrl,
+} from "../../../utils/productImages.js";
+import { formatCasNumber } from "../../../utils/productFormatting.js";
 
 const ProductCard = ({ product }) => {
   const { title, casNo, category, description, image, id } = product;
-  const displayImage = image || getProductImage(product);
+  const displayImage =
+    normalizeDriveImageUrl(image) || getProductImage(product);
+  const casLabel = formatCasNumber(casNo);
 
   return (
     <Link
@@ -17,8 +23,8 @@ const ProductCard = ({ product }) => {
           <p className="text-[11px] uppercase tracking-[0.35em] text-base-content/60">
             {category || "Uncategorized"}
           </p>
-          <span className="rounded-full bg-base-200 px-3 py-1 text-xs font-semibold text-base-content">
-            {casNo || "N/A"}
+          <span className="rounded-full bg-base-200 px-3 py-1 text-xs font-semibold text-base-content whitespace-nowrap font-mono tracking-[0.12em] tabular-nums">
+            {casLabel}
           </span>
         </div>
 

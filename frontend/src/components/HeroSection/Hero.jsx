@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-
-const heroStats = [
-  { label: "Active molecules", value: "120+" },
-  { label: "Global shipments", value: "50+" },
-  { label: "Average lead time", value: "10 days" },
-];
+import useProducts from "../../hooks/useProducts.js";
 
 const Hero = () => {
+  const { products, isLoading } = useProducts();
+
+  const heroStats = useMemo(() => {
+    const total = products.length;
+    const formatValue = (value) =>
+      !total && isLoading ? "…" : String(value);
+
+    return [
+      { label: "Active molecules", value: formatValue(total) },
+      { label: "Industries served", value: "08" },
+      { label: "Avg. delivery time", value: "10 days" },
+    ];
+  }, [products, isLoading]);
+
   return (
     <section className="bg-base-200">
       <div className="max-w-6xl mx-auto px-6 py-16 grid gap-12 lg:grid-cols-2">

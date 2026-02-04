@@ -37,7 +37,7 @@ const AboutUs = () => {
           <div className="relative">
             <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-xl" />
             <img
-              src="/Virendra_Logo.png"
+              src="/Logo.png"
               alt={`${siteConfig.company.name} logo`}
               className="relative rounded-3xl shadow-2xl border border-white/20 w-full object-contain h-[500px] bg-white/80 p-10"
             />

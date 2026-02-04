@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ProductCatalogue from "../components/Product/ProductCatalogue/ProductCatalogue.jsx";
-
-const stats = [
-  { label: "Molecules", value: "120+" },
-  { label: "Industries Served", value: "08" },
-  { label: "Avg. Lead Time", value: "10 Days" },
-];
+import useProducts from "../hooks/useProducts.js";
 
 const Products = () => {
+  const { products, isLoading } = useProducts();
+
+  const stats = useMemo(() => {
+    const total = products.length;
+    const formatValue = (value) =>
+      !total && isLoading ? "…" : String(value);
+
+    return [
+      { label: "Molecules", value: formatValue(total) },
+      { label: "Industries served", value: "08" },
+      { label: "Avg. delivery time", value: "10 days" },
+    ];
+  }, [products, isLoading]);
+
   return (
     <div className="space-y-12 pb-16 bg-base-100 text-base-content">
       <section className="bg-base-200">

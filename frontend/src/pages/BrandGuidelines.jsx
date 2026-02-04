@@ -27,7 +27,7 @@ const BrandGuidelines = () => {
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="flex items-center gap-4 mb-10">
                         <div className="p-3 bg-white rounded-xl shadow-sm">
-                            <img src="/Virendra_Logo.png" alt="Icon" className="w-8 h-8 object-contain" />
+                            <img src="/Logo.png" alt="Icon" className="w-8 h-8 object-contain" />
                         </div>
                         <h2 className="text-4xl font-bold">Our Logo</h2>
                     </div>
@@ -36,7 +36,7 @@ const BrandGuidelines = () => {
                         {/* Logo Showcase */}
                         <div className="bg-white rounded-3xl p-12 flex items-center justify-center border border-base-300 shadow-sm min-h-[400px]">
                             <img
-                                src="/Virendra_Logo.png"
+                                src="/Logo.png"
                                 alt="Virendra Logo"
                                 className="max-w-full max-h-[200px] object-contain drop-shadow-xl"
                             />

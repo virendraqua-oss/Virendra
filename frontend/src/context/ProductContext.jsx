@@ -10,70 +10,120 @@ import {
 
 const ProductContext = createContext(null);
 const PRODUCT_CACHE_KEY = "products";
+const PRODUCT_CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
 // -----------------------------
-// FIXED API BASE RESOLVER
+// APPS SCRIPT ENDPOINT
 // -----------------------------
-const resolveApiBase = () => {
-  // 1. Use Vercel / .env variable if provided
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL.replace(/\/$/, "");
-  }
-
-  // 2. Local development environment
-  if (import.meta.env.DEV) {
-    return "http://localhost:3000";
-  }
-
-  // 3. Production: use relative path (same origin)
-  return "";
-};
-
-const API_BASE_URL = resolveApiBase();
+const PRODUCTS_API_URL = (import.meta.env.VITE_PRODUCTS_API_URL || "").replace(
+  /\/$/,
+  ""
+);
 
 // -----------------------------
 // CACHE FUNCTIONS
 // -----------------------------
 const readCachedProducts = () => {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return { data: [], timestamp: 0 };
 
   try {
     const raw = window.localStorage.getItem(PRODUCT_CACHE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return { data: [], timestamp: 0 };
+    const parsed = JSON.parse(raw);
+
+    if (Array.isArray(parsed)) {
+      return { data: parsed, timestamp: 0 };
+    }
+
+    if (parsed && Array.isArray(parsed.data)) {
+      return {
+        data: parsed.data,
+        timestamp: Number(parsed.timestamp) || 0,
+      };
+    }
+
+    return { data: [], timestamp: 0 };
   } catch (err) {
     console.warn("Failed to read product cache", err);
-    return [];
+    return { data: [], timestamp: 0 };
   }
+};
+
+const isCacheFresh = (timestamp) => {
+  if (!timestamp) return false;
+  return Date.now() - timestamp < PRODUCT_CACHE_TTL;
 };
 
 // -----------------------------
 // PROVIDER
 // -----------------------------
 export const ProductProvider = ({ children }) => {
-  const [products, setProducts] = useState(readCachedProducts);
+  const cached = readCachedProducts();
+  const [products, setProducts] = useState(cached.data);
   const [status, setStatus] = useState(() =>
     products.length ? "success" : "idle"
   );
   const [error, setError] = useState(null);
   const bootstrapped = useRef(false);
+  const cacheTimestampRef = useRef(cached.timestamp || 0);
 
-  const fetchProducts = useCallback(async (hasExistingData = false) => {
+  const fetchProducts = useCallback(
+    async (hasExistingData = false, force = false) => {
+      if (!force && hasExistingData && isCacheFresh(cacheTimestampRef.current)) {
+        setStatus("success");
+        return;
+      }
+
     setStatus(hasExistingData ? "refreshing" : "loading");
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/products`);
+      if (!PRODUCTS_API_URL) {
+        throw new Error(
+          "Missing VITE_PRODUCTS_API_URL. Add your Apps Script endpoint to .env.local."
+        );
+      }
+
+      const response = await fetch(PRODUCTS_API_URL);
 
       if (!response.ok) {
         throw new Error("Unable to load the latest product catalogue.");
       }
 
       const data = await response.json();
-      setProducts(data);
+
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid product data format.");
+      }
+
+      const normalizeText = (value) =>
+        value === null || value === undefined ? "" : String(value);
+
+      const normalized = data.map((product, index) => ({
+        ...product,
+        id: product.id ?? index + 1,
+        title: normalizeText(product.title),
+        casNo: normalizeText(product.casNo),
+        description: normalizeText(product.description),
+        category: normalizeText(product.category),
+        synonyms: normalizeText(product.synonyms),
+        relatedProducts: normalizeText(product.relatedProducts),
+        tdsLink: normalizeText(product.tdsLink),
+        msdsLink: normalizeText(product.msdsLink),
+        image: normalizeText(product.image),
+        bondImage: normalizeText(product.bondImage),
+        timestamp: normalizeText(product.timestamp),
+      }));
+
+      setProducts(normalized);
 
       if (typeof window !== "undefined") {
-        window.localStorage.setItem(PRODUCT_CACHE_KEY, JSON.stringify(data));
+        window.localStorage.setItem(
+          PRODUCT_CACHE_KEY,
+          JSON.stringify({ data: normalized, timestamp: Date.now() })
+        );
       }
+      cacheTimestampRef.current = Date.now();
 
       setStatus("success");
     } catch (err) {
@@ -87,7 +137,10 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     if (bootstrapped.current) return;
     bootstrapped.current = true;
-    fetchProducts(products.length > 0);
+    const hasExistingData = products.length > 0;
+    if (!hasExistingData || !isCacheFresh(cacheTimestampRef.current)) {
+      fetchProducts(hasExistingData);
+    }
   }, [fetchProducts, products.length]);
 
   const value = useMemo(
@@ -96,7 +149,7 @@ export const ProductProvider = ({ children }) => {
       isLoading: status === "loading",
       isRefreshing: status === "refreshing",
       error,
-      reload: () => fetchProducts(products.length > 0),
+      reload: () => fetchProducts(products.length > 0, true),
     }),
     [products, status, error, fetchProducts]
   );

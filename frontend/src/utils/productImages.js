@@ -33,6 +33,28 @@ const imageMappings = [
   },
 ];
 
+export const normalizeDriveImageUrl = (url, size = 1200) => {
+  if (!url) return "";
+  const value = String(url).trim();
+
+  if (!value) return "";
+  if (
+    value.includes("drive.google.com/thumbnail") ||
+    value.includes("drive.usercontent.google.com") ||
+    value.includes("googleusercontent.com")
+  ) {
+    return value;
+  }
+
+  const match = value.match(
+    /(?:\/d\/|file\/d\/|id=|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/
+  );
+
+  if (!match) return value;
+  const fileId = match[1];
+  return `https://drive.google.com/thumbnail?sz=w${size}&id=${fileId}`;
+};
+
 export const getProductImage = (product) => {
   if (!product) return "";
 

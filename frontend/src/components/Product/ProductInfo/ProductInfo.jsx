@@ -4,7 +4,11 @@ import useProducts from "../../../hooks/useProducts.js";
 import siteConfig from "../../../config/siteConfig.js";
 import MaterialIcon from "../../MaterialIcon.jsx";
 import demoProducts from "../../../data/demoProducts.js";
-import { getProductImage } from "../../../utils/productImages.js";
+import {
+  getProductImage,
+  normalizeDriveImageUrl,
+} from "../../../utils/productImages.js";
+import { formatCasNumber } from "../../../utils/productFormatting.js";
 
 const ProductInfo = () => {
   const { id } = useParams();
@@ -49,7 +53,7 @@ const ProductInfo = () => {
   }
 
   const quickFacts = [
-    { label: "CAS Number", value: product.casNo || "N/A" },
+    { label: "CAS Number", value: formatCasNumber(product.casNo) },
     { label: "Category", value: product.category || "Not tagged yet" },
   ];
 
@@ -64,7 +68,8 @@ const ProductInfo = () => {
     },
   ].filter((doc) => doc.url);
 
-  const imageUrl = product.image || getProductImage(product);
+  const imageUrl =
+    normalizeDriveImageUrl(product.image) || getProductImage(product);
 
   return (
     <div className="bg-base-100 text-base-content">
@@ -175,8 +180,8 @@ const ProductHero = ({ product, hasDocuments, imageUrl }) => {
         </p>
 
         <div className="flex flex-wrap gap-4 text-sm font-semibold">
-          <span className="rounded-full bg-base-200 px-4 py-2 text-base-content/70">
-            CAS: {product.casNo || "TBD"}
+          <span className="rounded-full bg-base-200 px-4 py-2 text-base-content/70 whitespace-nowrap font-mono tracking-[0.12em] tabular-nums">
+            CAS: {formatCasNumber(product.casNo)}
           </span>
           {product.category && (
             <span className="rounded-full border border-base-300 px-4 py-2 text-base-content/70">
