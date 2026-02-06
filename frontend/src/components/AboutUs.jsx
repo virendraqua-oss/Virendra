@@ -28,7 +28,7 @@ const AboutUs = () => {
               We are a fast-growing <span className="text-primary">chemical intermediate</span> manufacturing company.
             </h2>
             <p className="text-lg text-base-content/80 leading-relaxed">
-              Specializing in high-purity aroma chemicals, pheromone intermediates, specialty molecules, and custom research solutions. With a strong foundation in chemical synthesis, process optimization, and quality compliance, we support global flavour &amp; fragrance houses, agro-solution manufacturers, and specialty chemical users with reliable, scalable intermediates.
+              Specializing in high-purity aroma chemicals, pheromone intermediates, specialty molecules, and custom research solutions. With a strong foundation in chemical synthesis backed by 4 decades of experience in R&D and production, process optimization, and quality compliance, we support global flavour &amp; fragrance houses, agro-solution Integrated Pest Management (IPM) provider, and specialty chemical users with reliable, scalable intermediates.
             </p>
             <p className="text-lg text-base-content/80 leading-relaxed">
               Our commitment to sustainability, safety, and scientific excellence drives consistent quality across all product categories.
@@ -176,7 +176,7 @@ const AboutUs = () => {
                   "Custom reactor capacities",
                   "Temp & pressure systems",
                   "In-house R&D lab",
-                  "Analytical lab (GC, GC-MS)",
+                  "Analytical lab (GC, GC-MS, HPLC, NMR)",
                   "Export-ready packaging"
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 bg-white/10 p-4 rounded-xl backdrop-blur-sm">
@@ -191,7 +191,7 @@ const AboutUs = () => {
                 <h3 className="text-2xl font-bold mb-6 text-white">Quality Assurance</h3>
                 <ul className="space-y-4">
                   {[
-                    "Purity verification via GC/GC-MS",
+                    "Purity verification via GC/GC-MS, HPLC, NMR",
                     "Controlled reaction environments",
                     "Environmentally responsible waste handling",
                     "Batch traceability",
@@ -217,7 +217,7 @@ const AboutUs = () => {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { title: "Unique Range", desc: "Trending accords like Cucumber, Watermelon.", icon: "category" },
-            { title: "Strong QA", desc: "High purity & consistency via GC-MS.", icon: "science" },
+            { title: "Strong QC", desc: "High purity & consistency via in-house QC.", icon: "science" },
             { title: "Eco-Friendly", desc: "Pheromone-based pest control intermediates.", icon: "eco" },
             { title: "Dual Capability", desc: "Flexible manufacturing: Small batches + Bulk.", icon: "factory" }
           ].map((val, i) => (

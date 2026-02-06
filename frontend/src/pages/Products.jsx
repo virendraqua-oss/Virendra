@@ -12,8 +12,8 @@ const Products = () => {
 
     return [
       { label: "Molecules", value: formatValue(total) },
-      { label: "Industries served", value: "08" },
-      { label: "Avg. delivery time", value: "10 days" },
+      { label: "Industries served", value: "04+" },
+      { label: "Avg. delivery time", value: "30-60 days" },
     ];
   }, [products, isLoading]);
 

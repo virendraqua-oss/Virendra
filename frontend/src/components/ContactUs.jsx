@@ -165,7 +165,6 @@ const contactDetails = [
     icon: "location_on",
     label: "Visit our lab",
     value: siteConfig.contact.address,
-    helper: "Mon - Fri, 9 am to 7 pm",
     newTab: true,
     href: siteConfig.contact.locationHref,
   },

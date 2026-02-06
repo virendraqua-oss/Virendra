@@ -12,8 +12,8 @@ const Hero = () => {
 
     return [
       { label: "Active molecules", value: formatValue(total) },
-      { label: "Industries served", value: "08" },
-      { label: "Avg. delivery time", value: "10 days" },
+      { label: "Industries served", value: "04+" },
+      { label: "Avg. delivery time", value: "30-60 days" },
     ];
   }, [products, isLoading]);
 
@@ -66,10 +66,10 @@ const Hero = () => {
             <div className="relative rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xl space-y-6">
               <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
                 <p className="text-2xl font-bold text-base-content">
-                  ISO-backed manufacturing
+                  QC-backed manufacturing
                 </p>
                 <p className="mt-2 text-base-content/60 text-sm">
-                  Purity verified through GC, GC-MS and controlled reaction
+                  Purity verified through GC, GC-MS, HPLC , NMR and controlled reaction
                   environments before dispatch.
                 </p>
               </div>
@@ -78,7 +78,7 @@ const Hero = () => {
                   Compliance-ready docs
                 </p>
                 <p className="mt-2 text-base-content/80">
-                  MSDS, TDS and regulatory support delivered digitally with every
+                  MSDS, TDS, and COA delivered digitally with every
                   order.
                 </p>
                 <ul className="mt-4 space-y-2 text-sm text-base-content/70">

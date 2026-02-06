@@ -6,12 +6,12 @@ import ContactUs from "../components/ContactUs.jsx";
 
 const highlights = [
   {
-    title: "Regulatory ready",
-    body: "Compliance support for REACH, EPA and BIS submissions.",
+    title: "Quality Compliance Ready",
+    body: "Inhouse Quality Compliance Department.",
   },
   {
-    title: "Formulation lab",
-    body: "Pilot batches and custom blends delivered in under 4 weeks.",
+    title: "R&D lab",
+    body: "Pilot batches and custom synthesis delivered in under 4 weeks.",
   },
   {
     title: "Transparent data",
@@ -21,7 +21,7 @@ const highlights = [
 
 const partnerTags = [
   "Flavour & fragrance houses",
-  "Agro-solution manufacturers",
+  "Agro-solution Integrated Pest Management (IPM) provider",
   "Specialty chemical users",
   "Cosmetic & home care brands",
 ];

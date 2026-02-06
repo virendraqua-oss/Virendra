@@ -63,13 +63,20 @@ const ProductInfo = () => {
       url: product.tdsLink,
     },
     {
-      label: "MSDS (Safety Data Sheet)",
+      label: "SDS (Safety Data Sheet)",
       url: product.msdsLink,
     },
   ].filter((doc) => doc.url);
 
-  const imageUrl =
+  const productImageUrl =
     normalizeDriveImageUrl(product.image) || getProductImage(product);
+  const bondImageUrl = normalizeDriveImageUrl(product.bondImage);
+  const heroImageUrl = bondImageUrl || productImageUrl;
+  const referenceImageUrl = bondImageUrl || productImageUrl;
+  const referenceImageAlt = bondImageUrl
+    ? `${product.title} chemical bond diagram`
+    : `${product.title} reference`;
+  const referenceImageClass = bondImageUrl ? "object-contain" : "object-cover";
 
   return (
     <div className="bg-base-100 text-base-content">
@@ -77,7 +84,7 @@ const ProductInfo = () => {
         <ProductHero
           product={product}
           hasDocuments={documents.length > 0}
-          imageUrl={imageUrl}
+          imageUrl={heroImageUrl}
         />
 
         <section className="grid gap-6 md:grid-cols-2">
@@ -96,13 +103,13 @@ const ProductInfo = () => {
               </p>
             </SectionCard>
 
-          <SectionCard className="md:col-span-2" title="Visual reference">
-            {imageUrl ? (
+          <SectionCard className="md:col-span-2" title="">
+            {referenceImageUrl ? (
               <div className="rounded-2xl border border-base-200 bg-base-100 p-4">
                 <img
-                  src={imageUrl}
-                  alt={`${product.title} reference`}
-                  className="h-48 w-full rounded-2xl object-cover"
+                  src={referenceImageUrl}
+                  alt={referenceImageAlt}
+                  className={`h-48 w-full rounded-2xl ${referenceImageClass}`}
                 />
               </div>
             ) : (

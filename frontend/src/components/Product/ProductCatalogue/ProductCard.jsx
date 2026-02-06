@@ -8,9 +8,15 @@ import {
 import { formatCasNumber } from "../../../utils/productFormatting.js";
 
 const ProductCard = ({ product }) => {
-  const { title, casNo, category, description, image, id } = product;
-  const displayImage =
+  const { title, casNo, category, description, image, bondImage, id } = product;
+  const productImage =
     normalizeDriveImageUrl(image) || getProductImage(product);
+  const bondImageUrl = normalizeDriveImageUrl(bondImage);
+  const displayImage = bondImageUrl || productImage;
+  const displayImageAlt = bondImageUrl
+    ? `${title} chemical bond diagram`
+    : title;
+  const displayImageClass = bondImageUrl ? "object-contain" : "object-cover";
   const casLabel = formatCasNumber(casNo);
 
   return (
@@ -40,8 +46,8 @@ const ProductCard = ({ product }) => {
           <figure className="mt-6 rounded-2xl bg-base-100 p-4 border border-base-200">
             <img
               src={displayImage}
-              alt={title}
-              className="h-48 w-full rounded-2xl object-cover"
+              alt={displayImageAlt}
+              className={`h-48 w-full rounded-2xl ${displayImageClass}`}
             />
           </figure>
         ) : (
