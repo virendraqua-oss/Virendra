@@ -61,7 +61,8 @@ const Footer = () => {
                 {siteConfig.contact.phone}
               </a>
             </li>
-            <li>{siteConfig.contact.address}</li>
+            <li><b>Office Address:</b><br/>{siteConfig.contact.address}</li>
+            <li><b>Unit Address:</b><br/>{siteConfig.contact.office_address}</li>
           </ul>
         </div>
 
