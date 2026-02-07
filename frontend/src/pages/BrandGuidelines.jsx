@@ -61,10 +61,14 @@ const BrandGuidelines = () => {
                                     <p className="text-sm opacity-70">Use high-resolution files for print.</p>
                                 </div>
                             </div>
-                            <button className="btn btn-outline gap-2 self-start">
+                            <a
+                                className="btn btn-outline gap-2 self-start"
+                                href="/Logo.png"
+                                download="logo.png"
+                            >
                                 <Download className="w-4 h-4" />
                                 Download Brand Assets
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
