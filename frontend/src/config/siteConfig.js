@@ -3,7 +3,7 @@ const siteConfig = {
     name: "Virendra Fine Chem LLP",
     shortName: "Virendra",
     initials: "V",
-    tagline: "Placeholder tagline.",
+    tagline: "Beyond the Frontiers of Chemistry",
   },
   contact: {
     phone: "+91 98205 30650",
