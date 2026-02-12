@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-base-200 bg-base-100/95 backdrop-blur">
       <div className="navbar max-w-6xl mx-auto px-4">
-        <div className="navbar-start">
+        <div className="navbar-start w-full lg:w-auto lg:mr-auto">
           <div className="dropdown">
             <label
               tabIndex={0}
@@ -51,18 +51,27 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
-          <Link to="/" className="flex items-center gap-3 font-bold text-xl">
-            <div className="h-10 w-10 rounded-lg bg-white/80 p-1 shadow-sm">
+          <Link
+            to="/"
+            className="flex flex-1 items-center justify-center gap-3 text-center font-bold text-xl lg:flex-none lg:justify-start lg:text-left"
+          >
+            <div className="h-25 w-25 shrink-0">
               <img
                 src="/Logo.png"
                 alt={`${siteConfig.company.name} logo`}
                 className="h-full w-full object-contain"
               />
             </div>
-            {siteConfig.company.name}
+            <span className="flex flex-col leading-tight">
+              <span>{siteConfig.company.name}</span>
+              <span className="text-sm text-base-content/70 font-medium">
+                {siteConfig.company.tagline}
+              </span>
+            </span>
           </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
+
+        <div className="navbar-end hidden lg:flex">
           <ul className="menu menu-horizontal gap-2 font-medium [--menu-active-bg:color-mix(in_oklab,var(--color-primary)_16%,transparent)] [--menu-active-fg:var(--color-primary)]">
             {navLinks.map((item) => (
               <li key={item.to}>
@@ -72,8 +81,6 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-        </div>
-        <div className="navbar-end">
           <Link to="/contact" className="btn btn-primary">
             Get Quote
           </Link>

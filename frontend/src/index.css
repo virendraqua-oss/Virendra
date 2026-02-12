@@ -104,8 +104,8 @@ body {
 }
 
 .logo-splash__logo {
-  width: 140px;
-  height: 140px;
+  width: 250px;
+  height: 250px;
   object-fit: contain;
   animation: logoSplash 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   will-change: transform, opacity;
