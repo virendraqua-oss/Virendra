@@ -32,9 +32,9 @@ const Footer = () => {
             Navigate
           </p>
           <ul className="mt-3 space-y-2 text-sm text-base-content/70">
-            <li>
+            {/* <li>
               <Link to="/brand-guidelines">Brand Guidelines</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/products">Product library</Link>
             </li>
