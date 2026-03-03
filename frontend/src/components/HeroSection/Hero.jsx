@@ -24,7 +24,7 @@ const Hero = () => {
           <p className="text-sm uppercase tracking-[0.4em] text-primary font-semibold">
             chemical intermediate manufacturer
           </p>
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-base-content">
+          <h1 className="text-3xl md:text-3xl font-extrabold leading-tight text-base-content">
             Aroma chemicals, pheromones, and specialty intermediates at scale
           </h1>
           <p className="text-lg text-base-content/70">

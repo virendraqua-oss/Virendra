@@ -81,9 +81,6 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-          <Link to="/contact" className="btn btn-primary">
-            Get Quote
-          </Link>
         </div>
       </div>
     </header>

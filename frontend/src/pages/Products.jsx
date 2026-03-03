@@ -24,7 +24,7 @@ const Products = () => {
           <p className="uppercase tracking-[0.4em] text-xs text-primary/70 font-semibold">
             product library
           </p>
-          <h1 className="text-4xl md:text-5xl font-extrabold mt-4">
+          <h1 className="text-3xl md:text-3xl font-extrabold mt-4">
             Aroma chemicals, pheromone intermediates, and specialty molecules
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-base-content/70 leading-relaxed">
