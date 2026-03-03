@@ -321,7 +321,7 @@ const ContactUs = () => {
             contact {siteConfig.company.name}
           </p>
           <h2 className="mt-3 text-3xl font-bold text-base-content">
-            Kick-start a collaboration
+            Request a Quote
           </h2>
           <p className="mt-2 text-sm text-base-content/70">
             Share your requirements and we will respond with data sheets,
