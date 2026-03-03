@@ -8,8 +8,8 @@ const siteConfig = {
   contact: {
     phone: "+91 98205 30650",
     phoneHref: "+91 98205 30650",
-    email: "info@virendra.com",
-    salesEmail: "sales@virendra.com",
+    email: "info@virendra.net",
+    salesEmail: "sales@virendra.net",
     whatsapp: "+91 98205 30650",
     address: "C-21/17, TTC Industrial Area, MIDC Industrial Area, Pawne, Navi Mumbai, Maharashtra 400703, India",
     office_address: "Virendra Niwas, 780, Behind Yogita Decorators, Sector-19, Koparkhairne, Navi Mumbai, Maharashtra 400709, India",
