@@ -21,7 +21,7 @@ const Products = () => {
     <div className="space-y-12 pb-16 bg-base-100 text-base-content">
       <section className="bg-base-200">
         <div className="max-w-6xl mx-auto px-6 py-16">
-          <p className="uppercase tracking-[0.4em] text-xs text-primary/70 font-semibold">
+          <p className="uppercase tracking-[0.4em] text-md text-primary/70 font-semibold">
             product library
           </p>
           <h1 className="text-3xl md:text-3xl font-extrabold mt-4">

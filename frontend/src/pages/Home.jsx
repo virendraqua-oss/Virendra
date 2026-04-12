@@ -53,10 +53,10 @@ const Home = () => {
         <div className="max-w-6xl mx-auto rounded-3xl border border-base-200 bg-gradient-to-r from-base-200 via-base-100 to-base-200 p-10 md:p-16 shadow-lg">
           <div className="space-y-6">
             <div className="space-y-4">
-              <p className="text-sm uppercase tracking-[0.4em] text-primary font-semibold">
-                virendra enterprises
+              <p className="text-md uppercase tracking-[0.4em] text-primary font-semibold">
+                Virendra Research Chem LLP
               </p>
-              <h2 className="text-4xl font-bold leading-tight">
+              <h2 className="text-3xl font-bold leading-tight">
                 Aroma, pheromone, and specialty intermediates built for scale
               </h2>
               <p className="text-base-content/70 text-lg">

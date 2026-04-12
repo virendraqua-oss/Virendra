@@ -28,7 +28,7 @@ const Hero = () => {
             Aroma chemicals, pheromones, and specialty intermediates at scale
           </h1>
           <p className="text-lg text-base-content/70">
-            Virendra Enterprises delivers high-purity intermediates for global
+            Virendra Research Chem LLP delivers high-purity intermediates for global
             flavour & fragrance houses, agro-solution partners, and specialty
             chemical users. Built on precision synthesis, process optimization,
             and rigorous quality compliance.
@@ -69,8 +69,7 @@ const Hero = () => {
                   QC-backed manufacturing
                 </p>
                 <p className="mt-2 text-base-content/60 text-sm">
-                  Purity verified through GC, GC-MS, HPLC , NMR and controlled reaction
-                  environments before dispatch.
+                 Manufacturing in controlled environment and Quality verified through GC, GC-MS, HPLC, NMR and other instrument analysis before dispatch.
                 </p>
               </div>
               <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
