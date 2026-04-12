@@ -7,20 +7,11 @@ const Footer = () => {
     <footer className="bg-base-200 border-t border-base-300 text-base-content">
       <div className="max-w-6xl mx-auto px-6 py-12 grid gap-10 md:grid-cols-3">
         <div className="space-y-3">
-          <div className="flex items-center gap-3 font-bold text-lg">
-            <div className="h-25 w-25 rounded-lg">
-              <img
-                src="/Logo.png"
-                alt={`${siteConfig.company.name} logo`}
-                className="h-full w-full object-contain"
-              />
-            </div>
-            
-          </div>
-          <span className="font-bold text-lg mb-3 block">
-            {siteConfig.company.name} <br />
-                  <span className="text-sm text-base-content/70 font-medium">{siteConfig.company.tagline}</span>
-            </span>
+          <img
+            src="/TextualLogo.png"
+            alt={`${siteConfig.company.name} textual logo`}
+            className="h-16 w-auto object-contain"
+          />
           <p className="text-sm text-base-content/60">
             High-purity aroma chemicals, pheromone intermediates, and specialty
             molecules engineered for reliable scale.

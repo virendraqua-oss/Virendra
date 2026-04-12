@@ -4,6 +4,8 @@ import useProducts from "../../../hooks/useProducts.js";
 import siteConfig from "../../../config/siteConfig.js";
 import MaterialIcon from "../../MaterialIcon.jsx";
 import demoProducts from "../../../data/demoProducts.js";
+import featuredCategories from "../../../data/featuredCategories.js";
+import QuickNavigation from "../ProductCatalogue/QuickNavigation.jsx";
 import {
   getProductImage,
   normalizeDriveImageUrl,
@@ -23,6 +25,13 @@ const ProductInfo = () => {
     () => productSource.find((item) => Number(item.id) === numericId),
     [productSource, numericId]
   );
+  const activeCategory = useMemo(() => {
+    const normalizedProductCategory = normalizeCategoryLabel(product?.category);
+
+    return featuredCategories.find(
+      (category) => normalizeCategoryLabel(category.title) === normalizedProductCategory
+    );
+  }, [product]);
 
   if (!product && isLoading) {
     return (
@@ -81,6 +90,8 @@ const ProductInfo = () => {
   return (
     <div className="bg-base-100 text-base-content">
       <div className="max-w-6xl mx-auto px-6 py-16 space-y-12">
+        <QuickNavigation activeCategorySlug={activeCategory?.slug} />
+
         <ProductHero
           product={product}
           hasDocuments={documents.length > 0}
@@ -160,6 +171,9 @@ const ProductInfo = () => {
     </div>
   );
 };
+
+const normalizeCategoryLabel = (value) =>
+  (value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
 const ProductHero = ({ product, hasDocuments, imageUrl }) => {
   return (

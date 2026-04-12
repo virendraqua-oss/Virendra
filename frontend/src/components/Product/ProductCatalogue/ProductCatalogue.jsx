@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import MaterialIcon from "../../MaterialIcon.jsx";
 import featuredCategories from "../../../data/featuredCategories.js";
 import demoProducts from "../../../data/demoProducts.js";
@@ -8,7 +8,27 @@ import useProducts from "../../../hooks/useProducts.js";
 
 const ProductCatalogue = () => {
   const { products, isLoading, isRefreshing, error, reload } = useProducts();
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("search") || "");
+
+  useEffect(() => {
+    setQuery(searchParams.get("search") || "");
+  }, [searchParams]);
+
+  const updateQuery = (value) => {
+    setQuery(value);
+
+    const nextParams = new URLSearchParams(searchParams);
+    const trimmedValue = value.trim();
+
+    if (trimmedValue) {
+      nextParams.set("search", trimmedValue);
+    } else {
+      nextParams.delete("search");
+    }
+
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const filteredProducts = useMemo(() => {
     const sourceProducts = products.length ? products : demoProducts;
@@ -55,12 +75,12 @@ const ProductCatalogue = () => {
                 className="input input-bordered w-full border-base-200 bg-base-100 pl-10 pr-10 text-base-content placeholder:text-base-content/60"
                 placeholder="Search by molecule, CAS, or category"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => updateQuery(event.target.value)}
               />
               {query && (
                 <button
                   type="button"
-                  onClick={() => setQuery("")}
+                  onClick={() => updateQuery("")}
                   className="btn btn-ghost btn-xs absolute right-3 top-1/2 -translate-y-1/2"
                   aria-label="Clear search"
                 >
@@ -132,7 +152,7 @@ const ProductCatalogue = () => {
             </p>
             <button
               className="btn btn-sm mt-4"
-              onClick={() => setQuery("")}
+              onClick={() => updateQuery("")}
             >
               Clear search
             </button>

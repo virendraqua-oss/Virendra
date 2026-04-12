@@ -5,6 +5,7 @@ import useProducts from "../../../hooks/useProducts.js";
 import featuredCategories from "../../../data/featuredCategories.js";
 import MaterialIcon from "../../MaterialIcon.jsx";
 import demoProducts from "../../../data/demoProducts.js";
+import QuickNavigation from "./QuickNavigation.jsx";
 
 const CategoryProducts = () => {
   const { category } = useParams();
@@ -51,6 +52,8 @@ const CategoryProducts = () => {
   return (
     <section className="py-16 bg-base-200 min-h-screen">
       <div className="max-w-6xl mx-auto px-6 space-y-10">
+        <QuickNavigation activeCategorySlug={categoryData?.slug} />
+
         {categoryData ? (
           <div className="rounded-3xl border border-base-200 bg-base-100 p-8 md:p-10 shadow-lg">
             <p className="text-xs uppercase tracking-[0.35em] text-primary/70 font-semibold">
